@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Hero</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <header id="hud" class="hidden">
+      <div class="hud-item">Level <span id="hud-level">1</span></div>
+      <div class="hud-item">Score <span id="hud-score">0</span></div>
+      <div class="hud-item">Streak <span id="hud-streak">0</span></div>
+      <div class="hud-item">🏢 <span id="hud-buildings">5</span></div>
+      <button id="mute-btn" class="icon-btn" title="Mute sound">🔊</button>
+    </header>
+
+    <main id="stage">
+      <section id="screen-title" class="screen active">
+        <h1>Typing Hero</h1>
+        <p class="tagline">Defend the city — type the falling words before they land!</p>
+        <p id="continue-info" class="continue-info"></p>
+        <button id="btn-start" class="btn-primary">Start</button>
+        <button id="btn-restart-campaign" class="btn-secondary hidden">Start Over from Level 1</button>
+        <p class="hint">Never touch-typed before? Perfect. We start with one hand's worth of keys and build up from there.</p>
+      </section>
+
+      <section id="screen-level-intro" class="screen">
+        <h2 id="intro-level-title">Level 1</h2>
+        <p id="intro-message" class="intro-message"></p>
+        <div id="intro-keyboard" class="keyboard-guide"></div>
+        <button id="btn-begin-level" class="btn-primary">Press any key to begin</button>
+      </section>
+
+      <section id="screen-game" class="screen">
+        <div id="sky">
+          <div class="cloud cloud1"></div>
+          <div class="cloud cloud2"></div>
+          <div class="cloud cloud3"></div>
+          <canvas id="game-canvas" width="960" height="600"></canvas>
+        </div>
+        <div id="keyboard-guide" class="keyboard-guide"></div>
+      </section>
+
+      <section id="screen-level-complete" class="screen">
+        <h2 id="complete-title">Level Complete!</h2>
+        <div class="stats" id="complete-stats"></div>
+        <button id="btn-next-level" class="btn-primary">Continue</button>
+      </section>
+
+      <section id="screen-game-over" class="screen">
+        <h2>The City Has Fallen</h2>
+        <div class="stats" id="gameover-stats"></div>
+        <button id="btn-retry-level" class="btn-primary">Retry Level</button>
+        <button id="btn-restart-from-gameover" class="btn-secondary">Restart from Level 1</button>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

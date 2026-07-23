@@ -1,0 +1,315 @@
+:root {
+  --navy: #1d3557;
+  --blue: #457b9d;
+  --light-blue: #a8dadc;
+  --cream: #f1faee;
+  --red: #e63946;
+  --teal: #2a9d8f;
+  --gold: #ffd166;
+
+  --finger-pinky: #e63946;
+  --finger-ring: #f4a261;
+  --finger-middle: #ffd166;
+  --finger-index: #2a9d8f;
+  --finger-thumb: #a0a8b4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Trebuchet MS', 'Segoe UI', Verdana, sans-serif;
+  background: var(--navy);
+  color: var(--navy);
+  display: flex;
+  justify-content: center;
+}
+
+#app {
+  width: 100%;
+  max-width: 1000px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- HUD ---------- */
+
+#hud {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 16px;
+  background: var(--navy);
+  color: var(--cream);
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+#hud.hidden {
+  display: none;
+}
+
+.hud-item span {
+  color: var(--gold);
+}
+
+.icon-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--cream);
+}
+
+/* ---------- Screens ---------- */
+
+#stage {
+  flex: 1;
+  display: flex;
+  position: relative;
+  background: var(--cream);
+}
+
+.screen {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  gap: 14px;
+}
+
+.screen.active {
+  display: flex;
+}
+
+#screen-game.active {
+  justify-content: flex-start;
+  padding: 12px;
+  gap: 8px;
+}
+
+h1 {
+  font-size: 2.6rem;
+  color: var(--navy);
+  margin: 0;
+}
+
+h2 {
+  color: var(--navy);
+  margin: 0;
+}
+
+.tagline {
+  font-size: 1.15rem;
+  color: var(--blue);
+  max-width: 500px;
+}
+
+.hint {
+  color: var(--blue);
+  font-size: 0.95rem;
+  max-width: 440px;
+}
+
+.continue-info {
+  font-size: 0.95rem;
+  color: var(--blue);
+  min-height: 1.2em;
+}
+
+.intro-message {
+  font-size: 1.05rem;
+  color: var(--blue);
+  max-width: 500px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 1.05rem;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: white;
+  box-shadow: 0 4px 0 #1d7a70;
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #1d7a70;
+}
+
+.btn-secondary {
+  background: none;
+  color: var(--blue);
+  text-decoration: underline;
+  box-shadow: none;
+  padding: 6px 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------- Stats blocks ---------- */
+
+.stats {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 24px;
+  min-width: 260px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 1.05rem;
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-row strong {
+  color: var(--teal);
+}
+
+/* ---------- Sky / canvas ---------- */
+
+#sky {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 960 / 600;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #6fb1e0 0%, var(--light-blue) 55%, var(--cream) 100%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+#game-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50px;
+  filter: blur(1px);
+}
+
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+}
+
+.cloud1 { width: 90px; height: 30px; top: 8%; left: 10%; animation: drift 40s linear infinite; }
+.cloud1::before { width: 45px; height: 45px; top: -20px; left: 10px; }
+.cloud1::after { width: 35px; height: 35px; top: -14px; left: 45px; }
+
+.cloud2 { width: 70px; height: 24px; top: 18%; left: 55%; animation: drift 55s linear infinite reverse; }
+.cloud2::before { width: 36px; height: 36px; top: -16px; left: 8px; }
+.cloud2::after { width: 28px; height: 28px; top: -10px; left: 34px; }
+
+.cloud3 { width: 60px; height: 20px; top: 4%; left: 75%; animation: drift 48s linear infinite; }
+.cloud3::before { width: 30px; height: 30px; top: -14px; left: 6px; }
+.cloud3::after { width: 24px; height: 24px; top: -8px; left: 28px; }
+
+@keyframes drift {
+  from { transform: translateX(-20px); }
+  to { transform: translateX(40px); }
+}
+
+/* ---------- Keyboard guide ---------- */
+
+.keyboard-guide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.kb-row {
+  display: flex;
+  gap: 5px;
+}
+
+.kb-row-1 { margin-left: 14px; }
+.kb-row-2 { margin-left: 28px; }
+
+.kb-key {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: white;
+  background: var(--finger-index);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.kb-key.finger-pinky { background: var(--finger-pinky); }
+.kb-key.finger-ring { background: var(--finger-ring); }
+.kb-key.finger-middle { background: var(--finger-middle); color: var(--navy); }
+.kb-key.finger-index { background: var(--finger-index); }
+.kb-key.finger-thumb { background: var(--finger-thumb); }
+
+.kb-key.locked {
+  opacity: 0.28;
+  filter: grayscale(60%);
+}
+
+.kb-key.new-key {
+  animation: pulse-new 1s ease-in-out infinite;
+  outline: 3px solid var(--navy);
+}
+
+.kb-key.active-target {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 4px rgba(29,53,87,0.5), 0 2px 0 rgba(0,0,0,0.2);
+}
+
+@keyframes pulse-new {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@media (max-width: 640px) {
+  .kb-key { width: 24px; height: 24px; font-size: 0.7rem; }
+  .kb-row-1 { margin-left: 10px; }
+  .kb-row-2 { margin-left: 20px; }
+  h1 { font-size: 2rem; }
+}
