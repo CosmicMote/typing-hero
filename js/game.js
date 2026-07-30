@@ -5,6 +5,7 @@ import { createBuildings } from './building.js';
 import { Scoring } from './scoring.js';
 import { buildKeyboard, updateKeyboard } from './keyboard.js';
 import { loadSave, saveSave } from './storage.js';
+import { nextDifficultyFactor, effectiveFallMs } from './difficulty.js';
 import {
   setMuted, isMuted,
   playCorrect, playWrong, playWordDestroy,
@@ -90,18 +91,26 @@ export class Game {
     this.btnRestartCampaign.addEventListener('click', () => {
       this.levelIndex = 0;
       this.scoring.resetAll();
+      this.save.difficultyFactor = 1;
+      saveSave(this.save);
       this.goToLevelIntro();
     });
     this.btnBeginLevel.addEventListener('click', () => this.startLevel());
     this.btnNextLevel.addEventListener('click', () => {
       this.levelIndex = this.campaignComplete ? 0 : this.levelIndex + 1;
-      if (this.campaignComplete) this.scoring.resetAll();
+      if (this.campaignComplete) {
+        this.scoring.resetAll();
+        this.save.difficultyFactor = 1;
+        saveSave(this.save);
+      }
       this.goToLevelIntro();
     });
     this.btnRetryLevel.addEventListener('click', () => this.goToLevelIntro());
     this.btnRestartFromGameOver.addEventListener('click', () => {
       this.levelIndex = 0;
       this.scoring.resetAll();
+      this.save.difficultyFactor = 1;
+      saveSave(this.save);
       this.goToLevelIntro();
     });
 
@@ -159,7 +168,9 @@ export class Game {
   }
 
   startLevel() {
-    const level = this.currentLevel;
+    const baseLevel = this.currentLevel;
+    const level = { ...baseLevel, fallMs: effectiveFallMs(baseLevel.fallMs, this.save.difficultyFactor) };
+    this.currentLevel = level;
     this.words = [];
     this.particles = [];
     this.target = null;
@@ -367,6 +378,13 @@ export class Game {
     const nextIndex = this.levelIndex + 1;
     this.campaignComplete = nextIndex >= LEVELS.length;
 
+    const livesFraction = this.buildings.filter((b) => b.alive).length / this.buildings.length;
+    this.save.difficultyFactor = nextDifficultyFactor(
+      this.save.difficultyFactor,
+      this.scoring.accuracy,
+      livesFraction,
+    );
+
     this.save.highestLevelUnlocked = Math.max(
       this.save.highestLevelUnlocked,
       Math.min(nextIndex + 1, LEVELS.length),
@@ -393,6 +411,13 @@ export class Game {
   gameOver() {
     this.state = 'gameOver';
     playGameOver();
+
+    const livesFraction = this.buildings.filter((b) => b.alive).length / this.buildings.length;
+    this.save.difficultyFactor = nextDifficultyFactor(
+      this.save.difficultyFactor,
+      this.scoring.accuracy,
+      livesFraction,
+    );
 
     this.save.highScore = Math.max(this.save.highScore, this.scoring.total);
     saveSave(this.save);

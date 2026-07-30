@@ -1,9 +1,12 @@
+import { MIN_FACTOR, MAX_FACTOR } from './difficulty.js';
+
 const STORAGE_KEY = 'typingHeroSave';
 
 const DEFAULT_SAVE = {
   highestLevelUnlocked: 1,
   highScore: 0,
   muted: false,
+  difficultyFactor: 1,
 };
 
 export function loadSave() {
@@ -28,7 +31,11 @@ function sanitize(save) {
     ? save.highScore
     : DEFAULT_SAVE.highScore;
   const muted = typeof save.muted === 'boolean' ? save.muted : DEFAULT_SAVE.muted;
-  return { highestLevelUnlocked, highScore, muted };
+  const difficultyFactor = Number.isFinite(save.difficultyFactor)
+    && save.difficultyFactor >= MIN_FACTOR && save.difficultyFactor <= MAX_FACTOR
+    ? save.difficultyFactor
+    : DEFAULT_SAVE.difficultyFactor;
+  return { highestLevelUnlocked, highScore, muted, difficultyFactor };
 }
 
 export function saveSave(data) {
