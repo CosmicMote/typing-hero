@@ -1,6 +1,20 @@
 let ctx = null;
 let muted = false;
 
+// C major pentatonic across two octaves - no note in this set clashes with
+// any other, so any typing pace/order still sounds musical rather than
+// hitting a "wrong" note.
+const MELODY_SCALE = [
+  261.63, 293.66, 329.63, 392.00, 440.00,
+  523.25, 587.33, 659.25, 783.99, 880.00,
+  1046.50,
+];
+let melodyIndex = 0;
+
+function resetMelody() {
+  melodyIndex = 0;
+}
+
 function getCtx() {
   if (!ctx) {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -34,10 +48,13 @@ export function isMuted() {
 }
 
 export function playCorrect() {
-  tone(720, 0.08, 'sine', 0.12);
+  const freq = MELODY_SCALE[melodyIndex % MELODY_SCALE.length];
+  melodyIndex++;
+  tone(freq, 0.08, 'sine', 0.12);
 }
 
 export function playWrong() {
+  resetMelody();
   tone(140, 0.15, 'sawtooth', 0.1);
 }
 
@@ -47,6 +64,7 @@ export function playWordDestroy() {
 }
 
 export function playBuildingHit() {
+  resetMelody();
   tone(120, 0.3, 'square', 0.16);
   tone(80, 0.35, 'sawtooth', 0.14, 0.05);
 }
